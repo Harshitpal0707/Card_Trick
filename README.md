@@ -1,6 +1,7 @@
 # Card_Trick
 
 link:-
+https://harshitpal0707.github.io/Card_Trick/
 
 
 This is an interactive web-based magic trick where the user selects a card mentally, and the system correctly guesses it after three rounds.
