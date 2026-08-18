@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21 Card Magic Trick</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #000000;
+            color: #f3f705eb;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        #card-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px;
+        }
+        .card {
+            width: 80px;
+            height: 120px;
+            background: rgb(246, 244, 244);
+            color: rgba(128, 9, 9, 0.92);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 2px 2px 10px rgba(219, 236, 217, 0.968);
+        }
+        .btn {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+        #result {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #129d12;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎩Card guessing Magic Trick</h1>
+<p>Pick a card in your mind. Then select the column it's in and let me guess.</p>
+<div id="card-container"></div>
+<div id="buttons">
+    <button class="btn" onclick="selectPile(0)">Pile 1</button>
+    <button class="btn" onclick="selectPile(1)">Pile 2</button>
+    <button class="btn" onclick="selectPile(2)">Pile 3</button>
+</div>
+<button class="btn" onclick="restartGame()">Restart</button>
+<div id="result"></div>
+
+<script>
+    const allCards = [
+        "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠",
+        "J♠", "Q♠", "K♠", "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥"
+    ];
+
+    let cards = [];
+    let piles = [[], [], []];
+    let round = 0;
+
+    function shuffleAndDeal() {
+        cards = [...allCards];
+        cards.sort(() => Math.random() - 0.5);
+        dealIntoPiles();
+    }
+
+    function dealIntoPiles() {
+        piles = [[], [], []];
+        for (let i = 0; i < cards.length; i++) {
+            piles[i % 3].push(cards[i]);
+        }
+        renderCards();
+    }
+
+    function renderCards() {
+        const container = document.getElementById("card-container");
+        container.innerHTML = "";
+        for (let i = 0; i < 3; i++) {
+            const col = document.createElement("div");
+            col.className = "column";
+            for (let card of piles[i]) {
+                const div = document.createElement("div");
+                div.className = "card";
+                div.textContent = card;
+                col.appendChild(div);
+            }
+            container.appendChild(col);
+        }
+    }
+
+    function selectPile(pileIndex) {
+        let newOrder;
+        if (pileIndex === 0) newOrder = [...piles[1], ...piles[0], ...piles[2]];
+        else if (pileIndex === 1) newOrder = [...piles[0], ...piles[1], ...piles[2]];
+        else newOrder = [...piles[0], ...piles[2], ...piles[1]];
+
+        cards = newOrder;
+        round++;
+
+        if (round < 3) {
+            dealIntoPiles();
+        } else {
+            revealCard();
+        }
+    }
+
+    function revealCard() {
+        document.getElementById("card-container").innerHTML = "";
+        document.getElementById("buttons").style.display = "none";
+        document.getElementById("result").innerText = `🎉 Your card is: ${cards[10]}🎉`;
+    }
+
+    function restartGame() {
+        round = 0;
+        document.getElementById("buttons").style.display = "block";
+        document.getElementById("result").innerText = "";
+        shuffleAndDeal();
+    }
+
+    shuffleAndDeal();
+</script>
+
+</body>
+</html>
